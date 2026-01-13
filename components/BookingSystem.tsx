@@ -1,0 +1,279 @@
+import React, { useState } from 'react';
+import { Calendar, Clock, CheckCircle, Scissors, User, ChevronRight, ChevronLeft, Loader } from 'lucide-react';
+import { Service, Stylist, Booking } from '../types';
+
+interface BookingSystemProps {
+  services: Service[];
+  stylists: Stylist[];
+  onBookingComplete: (booking: Booking) => void;
+}
+
+const steps = ['Service', 'Stylist', 'Time', 'Confirm'];
+
+const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBookingComplete }) => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedStylist, setSelectedStylist] = useState<Stylist | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedTime, setSelectedTime] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  const dates = ['Today, Oct 24', 'Tomorrow, Oct 25', 'Sat, Oct 26', 'Sun, Oct 27'];
+  const times = ['10:00 AM', '11:30 AM', '1:00 PM', '2:30 PM', '4:00 PM', '5:30 PM'];
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
+  };
+
+  const isNextDisabled = () => {
+    if (currentStep === 0) return !selectedService;
+    if (currentStep === 1) return !selectedStylist;
+    if (currentStep === 2) return !selectedDate || !selectedTime;
+    return false;
+  };
+
+  const handleConfirmBooking = () => {
+    if(!selectedService || !selectedStylist) return;
+    
+    setIsProcessing(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+        const newBooking: Booking = {
+            id: Math.random().toString(36).substr(2, 9),
+            serviceName: selectedService.name,
+            stylistName: selectedStylist.name,
+            price: selectedService.price,
+            date: selectedDate,
+            time: selectedTime,
+            customerName: "You (Demo User)", // In a real app, this comes from auth
+            status: 'Confirmed',
+            avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`
+        };
+        
+        onBookingComplete(newBooking);
+        setIsProcessing(false);
+        setIsCompleted(true);
+        
+        // Reset after 5 seconds
+        setTimeout(() => {
+            setIsCompleted(false);
+            setCurrentStep(0);
+            setSelectedService(null);
+            setSelectedStylist(null);
+            setSelectedDate('');
+            setSelectedTime('');
+        }, 5000);
+    }, 1500);
+  };
+
+  if (isCompleted) {
+      return (
+        <div id="booking" className="py-24 bg-luxury-dark relative overflow-hidden flex items-center justify-center min-h-screen">
+             <div className="text-center animate-fade-in p-8 glass-panel rounded-2xl border border-green-500/30">
+                 <div className="w-24 h-24 bg-green-500 text-black rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+                     <CheckCircle size={48} />
+                 </div>
+                 <h2 className="text-3xl font-serif text-white mb-4">Booking Confirmed!</h2>
+                 <p className="text-gray-400 mb-6">You are all set for {selectedDate} at {selectedTime}.<br/>A WhatsApp confirmation has been sent to your number.</p>
+                 <button 
+                    onClick={() => { setIsCompleted(false); setCurrentStep(0); }}
+                    className="text-gold-500 hover:text-white underline"
+                 >
+                     Book Another Appointment
+                 </button>
+             </div>
+        </div>
+      )
+  }
+
+  return (
+    <div id="booking" className="py-24 bg-luxury-dark relative overflow-hidden scroll-mt-24 min-h-screen flex flex-col justify-center">
+        {/* Background Accents */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-900/10 rounded-full blur-3xl"></div>
+
+      <div className="max-w-4xl mx-auto px-6 relative z-10 w-full">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-serif text-white mb-4">Smart Booking</h2>
+          <p className="text-gray-400">Experience the future of convenience. Book in under 60 seconds.</p>
+        </div>
+
+        <div className="glass-panel rounded-2xl p-4 md:p-8 shadow-2xl border border-white/10">
+          {/* Progress Bar */}
+          <div className="flex justify-between mb-8 relative">
+            <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 -z-10 transform -translate-y-1/2"></div>
+            {steps.map((step, index) => (
+              <div key={step} className="flex flex-col items-center bg-luxury-dark px-2">
+                <div 
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-300 ${
+                    index <= currentStep ? 'bg-gold-500 text-black' : 'bg-gray-800 text-gray-500'
+                  }`}
+                >
+                  {index + 1}
+                </div>
+                <span className={`text-xs mt-2 ${index <= currentStep ? 'text-gold-500' : 'text-gray-600'}`}>{step}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Step Content */}
+          <div className="min-h-[400px]">
+            {currentStep === 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
+                {services.slice(0, 6).map((service) => (
+                  <button
+                    key={service.id}
+                    onClick={() => setSelectedService(service)}
+                    className={`flex items-center p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${
+                      selectedService?.id === service.id 
+                        ? 'border-gold-500 bg-gold-500/10' 
+                        : 'border-white/5 hover:border-white/20 hover:bg-white/5'
+                    }`}
+                  >
+                    <img src={service.image} alt={service.name} className="w-12 h-12 rounded-lg object-cover mr-4" />
+                    <div className="text-left">
+                      <h4 className="text-white font-medium">{service.name}</h4>
+                      <div className="flex items-center text-sm text-gray-400 mt-1">
+                        <span className="text-gold-500 font-bold mr-2">₹{service.price}</span>
+                        <span>• {service.duration}</span>
+                      </div>
+                    </div>
+                    {selectedService?.id === service.id && <CheckCircle className="ml-auto text-gold-500 w-5 h-5" />}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {currentStep === 1 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 animate-fade-in">
+                {stylists.map((stylist) => (
+                  <button
+                    key={stylist.id}
+                    onClick={() => setSelectedStylist(stylist)}
+                    className={`relative p-4 rounded-xl border flex flex-col items-center text-center transition-all ${
+                        selectedStylist?.id === stylist.id
+                        ? 'border-gold-500 bg-gold-500/10'
+                        : 'border-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <img src={stylist.image} alt={stylist.name} className="w-20 h-20 rounded-full object-cover mb-3 border-2 border-gray-700" />
+                    <h4 className="text-white font-medium">{stylist.name}</h4>
+                    <p className="text-xs text-gray-400 mb-2">{stylist.role}</p>
+                    <div className="text-xs bg-white/10 px-2 py-1 rounded text-gold-400">⭐ {stylist.rating}</div>
+                    {selectedStylist?.id === stylist.id && (
+                        <div className="absolute top-2 right-2 text-gold-500"><CheckCircle size={16} /></div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {currentStep === 2 && (
+              <div className="animate-fade-in">
+                <h3 className="text-white mb-4 flex items-center"><Calendar className="mr-2 text-gold-500" /> Select Date</h3>
+                <div className="flex gap-3 overflow-x-auto pb-4 mb-6">
+                  {dates.map((date) => (
+                    <button
+                      key={date}
+                      onClick={() => setSelectedDate(date)}
+                      className={`whitespace-nowrap px-6 py-3 rounded-lg border transition-all ${
+                        selectedDate === date ? 'bg-gold-500 text-black border-gold-500 font-bold' : 'border-white/10 text-gray-400 hover:border-white/30'
+                      }`}
+                    >
+                      {date}
+                    </button>
+                  ))}
+                </div>
+
+                <h3 className="text-white mb-4 flex items-center"><Clock className="mr-2 text-gold-500" /> Select Time</h3>
+                <div className="grid grid-cols-3 gap-3">
+                  {times.map((time) => (
+                    <button
+                      key={time}
+                      onClick={() => setSelectedTime(time)}
+                      className={`py-3 rounded-lg border text-center transition-all ${
+                        selectedTime === time ? 'bg-gold-500 text-black border-gold-500 font-bold' : 'border-white/10 text-gray-400 hover:border-white/30'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {currentStep === 3 && (
+              <div className="animate-fade-in flex flex-col items-center text-center pt-8">
+                <div className="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-6">
+                  <CheckCircle size={40} />
+                </div>
+                <h3 className="text-2xl font-serif text-white mb-2">Booking Summary</h3>
+                <p className="text-gray-400 mb-8 max-w-md">Almost done! Review your appointment details below. We'll send a confirmation to your WhatsApp.</p>
+                
+                <div className="w-full max-w-md bg-white/5 rounded-xl p-6 border border-white/10 text-left space-y-4">
+                  <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                    <span className="text-gray-400 flex items-center"><Scissors size={16} className="mr-2"/> Service</span>
+                    <span className="text-white font-medium">{selectedService?.name}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                    <span className="text-gray-400 flex items-center"><User size={16} className="mr-2"/> Stylist</span>
+                    <span className="text-white font-medium">{selectedStylist?.name}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                    <span className="text-gray-400 flex items-center"><Calendar size={16} className="mr-2"/> Date & Time</span>
+                    <span className="text-white font-medium">{selectedDate} at {selectedTime}</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-2">
+                    <span className="text-gray-400">Total Price</span>
+                    <span className="text-gold-500 text-xl font-bold">₹{selectedService?.price}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-between mt-8 pt-6 border-t border-white/10">
+            <button 
+              onClick={handleBack}
+              disabled={currentStep === 0}
+              className={`flex items-center px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                currentStep === 0 ? 'opacity-0 pointer-events-none' : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <ChevronLeft className="mr-2" size={18} /> Back
+            </button>
+            
+            {currentStep === steps.length - 1 ? (
+               <button 
+               className={`bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-full font-bold flex items-center shadow-lg shadow-green-900/20 transition-all hover:scale-105 ${isProcessing ? 'opacity-75 cursor-wait' : ''}`}
+               onClick={handleConfirmBooking}
+               disabled={isProcessing}
+             >
+               {isProcessing ? <><Loader className="animate-spin mr-2"/> Processing...</> : 'Confirm Booking'}
+             </button>
+            ) : (
+              <button 
+                onClick={handleNext}
+                disabled={isNextDisabled()}
+                className={`flex items-center px-8 py-3 rounded-full font-bold transition-all hover:scale-105 ${
+                  isNextDisabled() ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-gold-500 text-black hover:bg-gold-400 shadow-lg shadow-gold-500/20'
+                }`}
+              >
+                Next Step <ChevronRight className="ml-2" size={18} />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BookingSystem;
