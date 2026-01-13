@@ -20,13 +20,15 @@ const Auth: React.FC<AuthProps> = ({ type, onAuthSuccess, onSwitch, onBack }) =>
     setError('');
 
     // Sanitize inputs
-    const sanitizedEmail = email.trim();
+    const sanitizedEmail = email.trim().toLowerCase();
     const sanitizedPassword = password.trim();
 
     if (type === 'login') {
-      // Admin Logic: Check strictly for specific email/pass, but handle case-insensitivity for email
-      // This allows 'Salon@gmail.com' or 'salon@gmail.com' to work
-      if (sanitizedEmail.toLowerCase() === 'salon@gmail.com' && sanitizedPassword === 'salon123') {
+      // Admin Logic: Check for the specific admin credentials
+      // Now accepts 'CreateSalon@gmail.com' OR 'salon@gmail.com'
+      const adminEmails = ['createsalon@gmail.com', 'salon@gmail.com'];
+      
+      if (adminEmails.includes(sanitizedEmail) && sanitizedPassword === 'salon123') {
         onAuthSuccess('admin');
       } else {
         // Mock User Login logic (fallback if not admin)
@@ -94,7 +96,7 @@ const Auth: React.FC<AuthProps> = ({ type, onAuthSuccess, onSwitch, onBack }) =>
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-black/40 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white focus:border-gold-500 focus:outline-none transition-colors"
-                placeholder="name@example.com"
+                placeholder="createsalon@gmail.com"
               />
             </div>
           </div>

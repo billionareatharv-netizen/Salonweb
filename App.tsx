@@ -128,7 +128,7 @@ export const App: React.FC = () => {
       )}
 
       {/* Navbar */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-lg border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled || mobileMenuOpen ? 'bg-black/90 backdrop-blur-lg border-b border-white/10 py-4' : 'bg-transparent py-4 md:py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <div className="text-2xl font-serif font-bold text-white tracking-tighter cursor-pointer" onClick={() => scrollToSection('root')}>
             Lumière<span className="text-gold-500">.</span>
@@ -155,19 +155,29 @@ export const App: React.FC = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
+          <button className="md:hidden text-white p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </nav>
       
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-          <div className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center space-y-8 animate-fade-in">
-              <button onClick={() => scrollToSection('services')} className="text-2xl font-serif text-white">Services</button>
-              <button onClick={() => scrollToSection('stylists')} className="text-2xl font-serif text-white">Stylists</button>
-              <button onClick={() => scrollToSection('booking')} className="text-gold-500 text-2xl font-serif">Book Now</button>
-              <button onClick={() => { setMobileMenuOpen(false); setView('login'); }} className="text-white text-xl">Login</button>
+          <div className="fixed inset-0 bg-luxury-black/98 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-8 animate-fade-in">
+              <button 
+                className="absolute top-6 right-6 text-gray-400 p-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                  <X size={32} />
+              </button>
+              <button onClick={() => scrollToSection('services')} className="text-2xl font-serif text-white hover:text-gold-500 transition-colors">Services</button>
+              <button onClick={() => scrollToSection('stylists')} className="text-2xl font-serif text-white hover:text-gold-500 transition-colors">Stylists</button>
+              <button onClick={() => scrollToSection('ai-preview')} className="text-2xl font-serif text-white hover:text-gold-500 transition-colors">AI Preview</button>
+              <button onClick={() => scrollToSection('booking')} className="text-gold-500 text-3xl font-serif font-bold">Book Now</button>
+              <div className="w-16 h-px bg-white/10 my-4"></div>
+              <button onClick={() => { setMobileMenuOpen(false); setView('login'); }} className="text-white text-lg flex items-center gap-2">
+                 <span>Login / Sign Up</span>
+              </button>
           </div>
       )}
 

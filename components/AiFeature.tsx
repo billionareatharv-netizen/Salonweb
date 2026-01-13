@@ -29,10 +29,10 @@ const AiFeature: React.FC = () => {
   }, []);
 
   return (
-    <section id="ai-preview" className="py-24 bg-black relative">
+    <section id="ai-preview" className="py-16 md:py-24 bg-black relative">
        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]"></div>
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
         
         {/* Text Content */}
         <div>
@@ -40,11 +40,11 @@ const AiFeature: React.FC = () => {
             <Sparkles size={20} />
             <span className="uppercase tracking-widest text-sm font-bold">AI Powered</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-serif text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-white mb-6 leading-tight">
             Try your look <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">before you book.</span>
           </h2>
-          <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+          <p className="text-gray-400 text-base md:text-lg mb-8 leading-relaxed">
             Unsure about that new color? Our proprietary AI mirrors analyze your face shape and skin tone to generate hyper-realistic previews of haircuts, colors, and styles.
           </p>
           
@@ -73,6 +73,7 @@ const AiFeature: React.FC = () => {
             <div 
                 ref={containerRef}
                 className="relative w-full h-full cursor-ew-resize"
+                style={{ touchAction: 'none' }}
                 onMouseMove={handleMouseMove}
                 onTouchMove={handleMouseMove}
                 onMouseDown={handleMouseDown}
