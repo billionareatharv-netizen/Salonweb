@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area 
 } from 'recharts';
-import { Users, DollarSign, Calendar, TrendingUp, Bell, Search, Settings, ArrowLeft } from 'lucide-react';
+import { Users, DollarSign, Calendar, TrendingUp, Bell, Search, Settings, ArrowLeft, Menu, X } from 'lucide-react';
 import { Booking, User } from '../types';
 
 interface DashboardProps {
@@ -22,6 +22,7 @@ const data = [
 
 const Dashboard: React.FC<DashboardProps> = ({ bookings, users }) => {
   const [activeTab, setActiveTab] = useState('Overview');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Calculate stats based on real bookings + demo base data
   const baseRevenue = 42500;
@@ -35,18 +36,36 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, users }) => {
   const totalUsers = baseUsers + users.length;
 
   return (
-    <div className="min-h-screen bg-luxury-black flex flex-col md:flex-row text-gray-200 font-sans">
+    <div className="min-h-screen bg-luxury-black flex flex-col md:flex-row text-gray-200 font-sans relative">
+      
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+            className="fixed inset-0 bg-black/80 z-40 md:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
+      )}
+
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-luxury-dark border-r border-white/5 hidden md:flex flex-col h-screen sticky top-0">
-        <div className="p-6 border-b border-white/5">
-          <h1 className="text-2xl font-serif font-bold tracking-tighter text-white">Lumière<span className="text-gold-500">.</span></h1>
-          <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">Owner Portal</span>
+      <aside className={`
+          fixed top-0 left-0 h-screen w-64 bg-luxury-dark border-r border-white/5 z-50 transform transition-transform duration-300 ease-in-out
+          md:relative md:translate-x-0
+          ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-serif font-bold tracking-tighter text-white">Lumière<span className="text-gold-500">.</span></h1>
+            <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">Owner Portal</span>
+          </div>
+          <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-gray-400">
+            <X size={24}/>
+          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           {['Overview', 'Bookings', 'Customers', 'Staff', 'Financials', 'Marketing'].map((item, i) => (
             <button 
                 key={item} 
-                onClick={() => setActiveTab(item)}
+                onClick={() => { setActiveTab(item); setIsMobileMenuOpen(false); }}
                 className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium flex items-center transition-colors ${activeTab === item ? 'bg-gold-500 text-black font-bold' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
             >
               <span className="mr-3">
@@ -68,15 +87,21 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, users }) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto bg-black/50">
+      <main className="flex-1 overflow-y-auto bg-black/50 w-full">
         {/* Header */}
         <header className="bg-luxury-dark border-b border-white/5 p-4 md:p-6 flex justify-between items-center sticky top-0 z-20 backdrop-blur-md bg-opacity-80">
           <div className="flex items-center gap-4">
+             <button 
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden text-gray-400 hover:text-white"
+             >
+                <Menu size={24} />
+             </button>
              <div className="md:hidden">
                  <h1 className="text-xl font-serif font-bold tracking-tighter text-white">Lumière<span className="text-gold-500">.</span></h1>
              </div>
              <h2 className="text-xl font-bold hidden md:block text-white">{activeTab}</h2>
-             <span className="px-3 py-1 bg-green-900/30 text-green-400 border border-green-500/20 rounded-full text-xs font-bold">Live Shop Open</span>
+             <span className="hidden sm:inline-block px-3 py-1 bg-green-900/30 text-green-400 border border-green-500/20 rounded-full text-xs font-bold">Live Shop Open</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="relative hidden md:block">
@@ -176,62 +201,64 @@ const Dashboard: React.FC<DashboardProps> = ({ bookings, users }) => {
                  <h3 className="text-lg font-bold text-white">Appointments</h3>
                  <button className="text-sm text-gold-500 font-bold hover:text-white" onClick={() => setActiveTab('Bookings')}>View All</button>
              </div>
-             <table className="w-full text-left border-collapse">
-                 <thead className="bg-white/5 text-xs uppercase text-gray-400">
-                     <tr>
-                         <th className="p-4 font-medium">Customer</th>
-                         <th className="p-4 font-medium">Service</th>
-                         <th className="p-4 font-medium">Stylist</th>
-                         <th className="p-4 font-medium">Status</th>
-                         <th className="p-4 font-medium text-right">Amount</th>
-                     </tr>
-                 </thead>
-                 <tbody className="text-sm">
-                     {bookings.length === 0 && (
-                         <tr>
-                             <td colSpan={5} className="p-8 text-center text-gray-500">No recent bookings. Go to customer view and book one!</td>
-                         </tr>
-                     )}
-                     {/* New Bookings First */}
-                     {bookings.map((booking) => (
-                         <tr key={booking.id} className="border-b border-white/5 hover:bg-white/5 transition-colors animate-fade-in">
-                             <td className="p-4 font-medium text-white">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center text-xs font-bold">NEW</div>
-                                    {booking.customerName}
-                                </div>
-                             </td>
-                             <td className="p-4 text-gray-400">{booking.serviceName}</td>
-                             <td className="p-4">
-                                 <div className="flex items-center gap-2">
-                                     <span className="text-gray-300">{booking.stylistName}</span>
-                                 </div>
-                             </td>
-                             <td className="p-4">
-                                 <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/20">{booking.status}</span>
-                             </td>
-                             <td className="p-4 text-right font-medium text-white">₹{booking.price}</td>
-                         </tr>
-                     ))}
-                     {/* Static Mock Data */}
-                     {[1,2,3,4].map((_, i) => (
-                         <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                             <td className="p-4 font-medium text-gray-300">Alice Freeman</td>
-                             <td className="p-4 text-gray-500">Hair Spa & Cut</td>
-                             <td className="p-4">
-                                 <div className="flex items-center gap-2">
-                                     <img src={`https://i.pravatar.cc/150?img=${20+i}`} className="w-6 h-6 rounded-full grayscale" alt=""/>
-                                     <span className="text-gray-500">Jessica</span>
-                                 </div>
-                             </td>
-                             <td className="p-4">
-                                 <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-900/20 text-green-600 border border-green-900/30">Confirmed</span>
-                             </td>
-                             <td className="p-4 text-right font-medium text-gray-400">₹2,400</td>
-                         </tr>
-                     ))}
-                 </tbody>
-             </table>
+             <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead className="bg-white/5 text-xs uppercase text-gray-400">
+                        <tr>
+                            <th className="p-4 font-medium">Customer</th>
+                            <th className="p-4 font-medium">Service</th>
+                            <th className="p-4 font-medium">Stylist</th>
+                            <th className="p-4 font-medium">Status</th>
+                            <th className="p-4 font-medium text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-sm">
+                        {bookings.length === 0 && (
+                            <tr>
+                                <td colSpan={5} className="p-8 text-center text-gray-500">No recent bookings. Go to customer view and book one!</td>
+                            </tr>
+                        )}
+                        {/* New Bookings First */}
+                        {bookings.map((booking) => (
+                            <tr key={booking.id} className="border-b border-white/5 hover:bg-white/5 transition-colors animate-fade-in">
+                                <td className="p-4 font-medium text-white">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-8 h-8 rounded-full bg-gold-500/20 text-gold-500 flex items-center justify-center text-xs font-bold">NEW</div>
+                                        {booking.customerName}
+                                    </div>
+                                </td>
+                                <td className="p-4 text-gray-400">{booking.serviceName}</td>
+                                <td className="p-4">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-gray-300">{booking.stylistName}</span>
+                                    </div>
+                                </td>
+                                <td className="p-4">
+                                    <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/20">{booking.status}</span>
+                                </td>
+                                <td className="p-4 text-right font-medium text-white">₹{booking.price}</td>
+                            </tr>
+                        ))}
+                        {/* Static Mock Data */}
+                        {[1,2,3,4].map((_, i) => (
+                            <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td className="p-4 font-medium text-gray-300">Alice Freeman</td>
+                                <td className="p-4 text-gray-500">Hair Spa & Cut</td>
+                                <td className="p-4">
+                                    <div className="flex items-center gap-2">
+                                        <img src={`https://i.pravatar.cc/150?img=${20+i}`} className="w-6 h-6 rounded-full grayscale" alt=""/>
+                                        <span className="text-gray-500">Jessica</span>
+                                    </div>
+                                </td>
+                                <td className="p-4">
+                                    <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-900/20 text-green-600 border border-green-900/30">Confirmed</span>
+                                </td>
+                                <td className="p-4 text-right font-medium text-gray-400">₹2,400</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+             </div>
            </div>
 
         </div>

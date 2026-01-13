@@ -19,7 +19,7 @@ interface MembershipProps {
 }
 
 export const HeroSection: React.FC<SectionProps> = ({ onScrollTo }) => (
-  <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+  <section className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden">
     {/* Background Video/Image Placeholder */}
     <div className="absolute inset-0 z-0">
       <img 
@@ -30,25 +30,25 @@ export const HeroSection: React.FC<SectionProps> = ({ onScrollTo }) => (
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-luxury-black"></div>
     </div>
 
-    <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+    <div className="relative z-10 text-center px-6 max-w-5xl mx-auto pt-20 md:pt-0">
       <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 backdrop-blur-md">
         <span className="text-gold-500 text-xs font-bold tracking-widest uppercase">Award Winning Luxury</span>
       </div>
       
-      <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 tracking-tight leading-tight">
+      <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif text-white mb-6 tracking-tight leading-tight">
         Not Just a Salon. <br />
         <span className="italic text-gold-400">A Masterpiece.</span>
       </h1>
       
-      <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light">
+      <p className="text-gray-300 text-base md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
         Where precision meets artistry. Experience the finest hair, skin, and wellness treatments in an environment designed for the elite.
       </p>
 
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <button onClick={() => onScrollTo('booking')} className="px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full sm:w-auto">
+        <button onClick={() => onScrollTo('booking')} className="w-full sm:w-auto px-8 py-4 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
           Book Appointment
         </button>
-        <button onClick={() => onScrollTo('ai-preview')} className="px-8 py-4 border border-white/20 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all flex items-center backdrop-blur-sm">
+        <button onClick={() => onScrollTo('ai-preview')} className="w-full sm:w-auto px-8 py-4 border border-white/20 text-white rounded-full font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center backdrop-blur-sm">
           <Play size={20} className="mr-2 fill-current" /> Watch Film
         </button>
       </div>
@@ -76,7 +76,7 @@ export const LiveWaitTicker = () => (
       {[1,2,3,4].map(i => (
         <div key={i} className="flex items-center mx-8">
             <Clock size={16} className="mr-2" />
-            <span className="font-bold text-sm uppercase tracking-wider">Live Status: Salon Open • Current Wait Time: <span className="bg-black text-gold-500 px-2 rounded ml-1">12 Mins</span> • 3 Stylists Available</span>
+            <span className="font-bold text-xs md:text-sm uppercase tracking-wider">Live Status: Salon Open • Current Wait Time: <span className="bg-black text-gold-500 px-2 rounded ml-1">12 Mins</span> • 3 Stylists Available</span>
         </div>
       ))}
     </div>
@@ -84,18 +84,18 @@ export const LiveWaitTicker = () => (
 );
 
 export const ServicesGrid: React.FC<ServicesProps> = ({ services, onScrollTo }) => (
-  <section id="services" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
-    <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-        <div>
-            <h2 className="text-4xl md:text-5xl font-serif text-white mb-4">Curated Services</h2>
-            <p className="text-gray-400 max-w-md">Premium treatments designed to rejuvenate your style and spirit.</p>
+  <section id="services" className="py-12 md:py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+    <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16">
+        <div className="w-full md:w-auto">
+            <h2 className="text-3xl md:text-5xl font-serif text-white mb-4">Curated Services</h2>
+            <p className="text-gray-400 max-w-md text-sm md:text-base">Premium treatments designed to rejuvenate your style and spirit.</p>
         </div>
-        <button onClick={() => onScrollTo('booking')} className="text-gold-500 border-b border-gold-500 pb-1 hover:text-white hover:border-white transition-colors mt-6 md:mt-0">View Full Menu</button>
+        <button onClick={() => onScrollTo('booking')} className="text-gold-500 border-b border-gold-500 pb-1 hover:text-white hover:border-white transition-colors mt-6 md:mt-0 text-sm md:text-base">View Full Menu</button>
     </div>
     
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {services.map((service) => (
-        <div key={service.id} className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer" onClick={() => onScrollTo('booking')}>
+        <div key={service.id} className="group relative h-80 md:h-96 rounded-2xl overflow-hidden cursor-pointer shadow-lg" onClick={() => onScrollTo('booking')}>
           <img 
             src={service.image} 
             alt={service.name} 
@@ -122,9 +122,9 @@ export const ServicesGrid: React.FC<ServicesProps> = ({ services, onScrollTo }) 
 );
 
 export const StylistSection: React.FC<StylistProps> = ({ stylists, onScrollTo }) => (
-  <section id="stylists" className="py-24 bg-neutral-900/50 scroll-mt-24">
+  <section id="stylists" className="py-12 md:py-24 bg-neutral-900/50 scroll-mt-24">
     <div className="max-w-7xl mx-auto px-6">
-      <h2 className="text-center text-4xl md:text-5xl font-serif text-white mb-16">Meet The Artists</h2>
+      <h2 className="text-center text-3xl md:text-5xl font-serif text-white mb-10 md:mb-16">Meet The Artists</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {stylists.map(stylist => (
           <div key={stylist.id} className="bg-luxury-black border border-white/5 rounded-2xl p-6 hover:border-gold-500/30 transition-colors group">
@@ -136,7 +136,7 @@ export const StylistSection: React.FC<StylistProps> = ({ stylists, onScrollTo })
             </div>
             <h3 className="text-xl font-bold text-white mb-1">{stylist.name}</h3>
             <p className="text-gold-500 text-sm mb-4 uppercase tracking-wider">{stylist.role}</p>
-            <p className="text-gray-400 text-sm mb-6">Expert in {stylist.specialty}. Bringing over 8 years of international styling experience.</p>
+            <p className="text-gray-400 text-sm mb-6 line-clamp-2">Expert in {stylist.specialty}. Bringing over 8 years of international styling experience.</p>
             <button className="w-full py-3 border border-white/10 rounded-lg text-white hover:bg-gold-500 hover:text-black hover:border-gold-500 transition-all" onClick={() => onScrollTo('booking')}>Book with {stylist.name.split(' ')[0]}</button>
           </div>
         ))}
@@ -146,21 +146,21 @@ export const StylistSection: React.FC<StylistProps> = ({ stylists, onScrollTo })
 );
 
 export const MembershipCard: React.FC<MembershipProps> = ({ onJoinClick }) => (
-  <section id="membership" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
-    <div className="glass-panel rounded-3xl p-8 md:p-16 relative overflow-hidden text-center">
+  <section id="membership" className="py-12 md:py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+    <div className="glass-panel rounded-3xl p-6 md:p-16 relative overflow-hidden text-center">
       <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-r from-transparent via-gold-500/10 to-transparent transform rotate-45 scale-150 animate-pulse"></div>
       
-      <span className="text-gold-500 font-bold tracking-widest uppercase mb-4 block">Lumière Elite</span>
-      <h2 className="text-4xl md:text-6xl font-serif text-white mb-6">Unlock Unlimited Luxury</h2>
-      <p className="text-gray-300 max-w-2xl mx-auto mb-10 text-lg">
+      <span className="text-gold-500 font-bold tracking-widest uppercase mb-4 block text-xs md:text-sm">Lumière Elite</span>
+      <h2 className="text-3xl md:text-6xl font-serif text-white mb-6">Unlock Unlimited Luxury</h2>
+      <p className="text-gray-300 max-w-2xl mx-auto mb-10 text-base md:text-lg">
         Join our exclusive membership program. Priority booking, 20% off all services, and complimentary monthly spa treatments.
       </p>
       
-      <div className="flex flex-col md:flex-row justify-center gap-6">
-        <button className="bg-gold-500 text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-white transition-colors" onClick={onJoinClick}>
+      <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-6">
+        <button className="bg-gold-500 text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-white transition-colors w-full md:w-auto" onClick={onJoinClick}>
           Become a Member
         </button>
-        <button className="text-white underline hover:text-gold-500 transition-colors" onClick={() => alert("Demo: Showing benefits modal...")}>
+        <button className="text-white underline hover:text-gold-500 transition-colors mt-2 md:mt-0" onClick={() => alert("Demo: Showing benefits modal...")}>
           View Benefits
         </button>
       </div>
@@ -181,10 +181,10 @@ export const ContactForm = () => {
     };
 
     return (
-        <section id="contact" className="py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <section id="contact" className="py-12 md:py-24 px-6 max-w-7xl mx-auto border-t border-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
                 <div>
-                    <h2 className="text-4xl font-serif text-white mb-4">Get in Touch</h2>
+                    <h2 className="text-3xl md:text-4xl font-serif text-white mb-4">Get in Touch</h2>
                     <p className="text-gray-400 mb-8">Have a question or special request? Send us a message and our concierge will get back to you shortly.</p>
                     <div className="space-y-4 text-gray-400">
                          <div className="flex items-center gap-4 p-4 bg-white/5 rounded-lg">
@@ -204,10 +204,10 @@ export const ContactForm = () => {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="glass-panel p-8 rounded-2xl space-y-4">
+                <form onSubmit={handleSubmit} className="glass-panel p-6 md:p-8 rounded-2xl space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input required type="text" placeholder="First Name" className="bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:border-gold-500 focus:outline-none" />
-                        <input required type="text" placeholder="Last Name" className="bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:border-gold-500 focus:outline-none" />
+                        <input required type="text" placeholder="First Name" className="bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:border-gold-500 focus:outline-none w-full" />
+                        <input required type="text" placeholder="Last Name" className="bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:border-gold-500 focus:outline-none w-full" />
                     </div>
                     <input required type="email" placeholder="Email Address" className="w-full bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:border-gold-500 focus:outline-none" />
                     <textarea required rows={4} placeholder="Your Message" className="w-full bg-black/40 border border-white/10 rounded-lg p-4 text-white focus:border-gold-500 focus:outline-none"></textarea>
@@ -225,8 +225,8 @@ export const ContactForm = () => {
 };
 
 export const Footer: React.FC<SectionProps> = ({ onScrollTo }) => (
-    <footer className="bg-black pt-24 pb-12 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-black pt-12 md:pt-24 pb-12 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 mb-16">
             <div className="md:col-span-1">
                 <h2 className="text-3xl font-serif text-white mb-6">Lumière.</h2>
                 <p className="text-gray-500 text-sm leading-relaxed">

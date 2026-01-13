@@ -75,7 +75,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
   if (isCompleted) {
       return (
         <div id="booking" className="py-24 bg-luxury-dark relative overflow-hidden flex items-center justify-center min-h-screen">
-             <div className="text-center animate-fade-in p-8 glass-panel rounded-2xl border border-green-500/30">
+             <div className="text-center animate-fade-in p-8 glass-panel rounded-2xl border border-green-500/30 mx-4">
                  <div className="w-24 h-24 bg-green-500 text-black rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
                      <CheckCircle size={48} />
                  </div>
@@ -93,7 +93,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
   }
 
   return (
-    <div id="booking" className="py-24 bg-luxury-dark relative overflow-hidden scroll-mt-24 min-h-screen flex flex-col justify-center">
+    <div id="booking" className="py-16 md:py-24 bg-luxury-dark relative overflow-hidden scroll-mt-24 min-h-screen flex flex-col justify-center">
         {/* Background Accents */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-900/10 rounded-full blur-3xl"></div>
@@ -106,10 +106,10 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
 
         <div className="glass-panel rounded-2xl p-4 md:p-8 shadow-2xl border border-white/10">
           {/* Progress Bar */}
-          <div className="flex justify-between mb-8 relative">
+          <div className="flex justify-between mb-8 relative px-2">
             <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 -z-10 transform -translate-y-1/2"></div>
             {steps.map((step, index) => (
-              <div key={step} className="flex flex-col items-center bg-luxury-dark px-2">
+              <div key={step} className="flex flex-col items-center bg-luxury-dark px-2 z-10">
                 <div 
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-300 ${
                     index <= currentStep ? 'bg-gold-500 text-black' : 'bg-gray-800 text-gray-500'
@@ -117,7 +117,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
                 >
                   {index + 1}
                 </div>
-                <span className={`text-xs mt-2 ${index <= currentStep ? 'text-gold-500' : 'text-gray-600'}`}>{step}</span>
+                <span className={`text-[10px] md:text-xs mt-2 ${index <= currentStep ? 'text-gold-500' : 'text-gray-600'}`}>{step}</span>
               </div>
             ))}
           </div>
@@ -177,7 +177,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
             {currentStep === 2 && (
               <div className="animate-fade-in">
                 <h3 className="text-white mb-4 flex items-center"><Calendar className="mr-2 text-gold-500" /> Select Date</h3>
-                <div className="flex gap-3 overflow-x-auto pb-4 mb-6">
+                <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
                   {dates.map((date) => (
                     <button
                       key={date}
@@ -192,7 +192,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
                 </div>
 
                 <h3 className="text-white mb-4 flex items-center"><Clock className="mr-2 text-gold-500" /> Select Time</h3>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {times.map((time) => (
                     <button
                       key={time}
@@ -219,15 +219,15 @@ const BookingSystem: React.FC<BookingSystemProps> = ({ services, stylists, onBoo
                 <div className="w-full max-w-md bg-white/5 rounded-xl p-6 border border-white/10 text-left space-y-4">
                   <div className="flex justify-between items-center border-b border-white/5 pb-3">
                     <span className="text-gray-400 flex items-center"><Scissors size={16} className="mr-2"/> Service</span>
-                    <span className="text-white font-medium">{selectedService?.name}</span>
+                    <span className="text-white font-medium text-right">{selectedService?.name}</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/5 pb-3">
                     <span className="text-gray-400 flex items-center"><User size={16} className="mr-2"/> Stylist</span>
-                    <span className="text-white font-medium">{selectedStylist?.name}</span>
+                    <span className="text-white font-medium text-right">{selectedStylist?.name}</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-white/5 pb-3">
                     <span className="text-gray-400 flex items-center"><Calendar size={16} className="mr-2"/> Date & Time</span>
-                    <span className="text-white font-medium">{selectedDate} at {selectedTime}</span>
+                    <span className="text-white font-medium text-right">{selectedDate} at {selectedTime}</span>
                   </div>
                   <div className="flex justify-between items-center pt-2">
                     <span className="text-gray-400">Total Price</span>
