@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Lumière | The Future of Beauty</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,10 +47,17 @@
       }
     </script>
     <style>
+      /* Mobile First Global Resets */
+      html, body {
+        width: 100%;
+        overflow-x: hidden; /* Strict no horizontal scroll */
+        -webkit-tap-highlight-color: transparent;
+      }
+
       /* Custom Scrollbar for Luxury Feel */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 6px; /* Thinner on desktop */
+        height: 6px;
       }
       ::-webkit-scrollbar-track {
         background: #171717;
@@ -62,18 +69,15 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #EAB308;
       }
+      
       .glass-panel {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.05);
       }
-      .gold-gradient-text {
-        background: linear-gradient(to right, #FACC15, #EAB308, #CA8A04);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      /* Utility to hide scrollbar but allow scrolling */
+      
+      /* Hide scrollbar but allow scrolling functionality */
       .scrollbar-hide::-webkit-scrollbar {
           display: none;
       }
@@ -96,7 +100,7 @@
 </script>
 </head>
   <body class="bg-luxury-black text-gray-200 antialiased selection:bg-gold-500 selection:text-black">
-    <div id="root"></div>
+    <div id="root" class="w-full overflow-hidden"></div>
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>

@@ -29,14 +29,15 @@ const AiFeature: React.FC = () => {
   }, []);
 
   return (
-    <section id="ai-preview" className="py-16 md:py-24 bg-black relative">
-       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]"></div>
+    <section id="ai-preview" className="py-16 md:py-24 bg-black relative w-full overflow-hidden">
+       {/* Blur accent - positioned absolutely and kept behind */}
+       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] z-0 pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
         
         {/* Text Content */}
-        <div>
-          <div className="flex items-center space-x-2 text-gold-500 mb-4">
+        <div className="text-center lg:text-left">
+          <div className="flex items-center justify-center lg:justify-start space-x-2 text-gold-500 mb-4">
             <Sparkles size={20} />
             <span className="uppercase tracking-widest text-sm font-bold">AI Powered</span>
           </div>
@@ -44,20 +45,20 @@ const AiFeature: React.FC = () => {
             Try your look <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">before you book.</span>
           </h2>
-          <p className="text-gray-400 text-base md:text-lg mb-8 leading-relaxed">
+          <p className="text-gray-400 text-base md:text-lg mb-8 leading-relaxed px-2 lg:px-0">
             Unsure about that new color? Our proprietary AI mirrors analyze your face shape and skin tone to generate hyper-realistic previews of haircuts, colors, and styles.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button className="flex items-center justify-center gap-2 bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-gray-200 transition-all">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <button className="flex items-center justify-center gap-2 bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-gray-200 transition-all w-full sm:w-auto">
               <Upload size={20} /> Upload Photo
             </button>
-            <button className="flex items-center justify-center gap-2 border border-white/20 text-white px-8 py-4 rounded-full font-bold hover:bg-white/5 transition-all">
+            <button className="flex items-center justify-center gap-2 border border-white/20 text-white px-8 py-4 rounded-full font-bold hover:bg-white/5 transition-all w-full sm:w-auto">
               <ScanFace size={20} /> Live Camera
             </button>
           </div>
           
-          <div className="mt-8 flex items-center gap-4 text-sm text-gray-500">
+          <div className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500">
             <span className="flex -space-x-2">
                {[1,2,3].map(i => (
                  <div key={i} className="w-8 h-8 rounded-full bg-gray-700 border-2 border-black"></div>
@@ -68,8 +69,8 @@ const AiFeature: React.FC = () => {
         </div>
 
         {/* Interactive Slider */}
-        <div className="relative">
-          <div className="relative w-full aspect-[4/5] md:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-white/10 select-none group">
+        <div className="relative w-full px-2">
+          <div className="relative w-full aspect-[4/5] md:aspect-square rounded-2xl overflow-hidden shadow-2xl border border-white/10 select-none group touch-none">
             <div 
                 ref={containerRef}
                 className="relative w-full h-full cursor-ew-resize"
@@ -83,34 +84,34 @@ const AiFeature: React.FC = () => {
                 <img 
                     src="https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=2069&auto=format&fit=crop" 
                     alt="After Look" 
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 />
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10">
+                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10 z-10">
                     AI GENERATED
                 </div>
 
                 {/* Before Image (Foreground, clipped) */}
                 <div 
-                    className="absolute inset-0 overflow-hidden"
+                    className="absolute inset-0 overflow-hidden pointer-events-none"
                     style={{ width: `${sliderPosition}%` }}
                 >
                     <img 
                         src="https://images.unsplash.com/photo-1560869713-7d0a29430803?q=80&w=2060&auto=format&fit=crop" 
                         alt="Before Look" 
-                        className="absolute w-full h-full max-w-none object-cover h-full"
+                        className="absolute w-full h-full max-w-none object-cover"
                         style={{ width: containerRef.current ? containerRef.current.clientWidth : '100%' }} // Keep aspect ratio
                     />
-                     <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10">
+                     <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10 z-10">
                         ORIGINAL
                     </div>
                 </div>
 
                 {/* Slider Handle */}
                 <div 
-                    className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize shadow-[0_0_20px_rgba(255,255,255,0.5)] z-20"
+                    className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize shadow-[0_0_20px_rgba(255,255,255,0.5)] z-20 pointer-events-none"
                     style={{ left: `${sliderPosition}%` }}
                 >
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg text-black">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white rounded-full flex items-center justify-center shadow-lg text-black">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M18 8L22 12L18 16"></path>
                             <path d="M6 8L2 12L6 16"></path>
@@ -121,7 +122,7 @@ const AiFeature: React.FC = () => {
           </div>
           
           {/* Decorative Elements */}
-          <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-stripes opacity-10"></div>
+          <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-stripes opacity-10 pointer-events-none"></div>
         </div>
 
       </div>
